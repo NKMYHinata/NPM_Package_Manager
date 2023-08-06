@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPM Dependencies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Check NPM Package Dependencies</h2>
+<label for="packageName">Package Name:</label>
+<input type="text" id="packageName" placeholder="Enter npm package name">
+<button onclick="getDependencies()">Query Dependencies</button>
+<pre id="output"></pre>
+
+<script>
+    function getDependencies() {
+        const packageName = document.getElementById('packageName').value;
+        if (!packageName) {
+            alert('Please enter a package name.');
+            return;
+        }
+
+        const NPM_API = `https://registry.npmjs.org/${packageName}/latest`;
+
+        fetch(NPM_API)
+            .then(response => response.json())
+            .then(data => {
+                const dependencies = data.dependencies;
+                document.getElementById('output').textContent = JSON.stringify(dependencies, null, 2);
+            })
+            .catch(error => {
+                console.error(`Error fetching dependencies for ${packageName}:`, error.message);
+                document.getElementById('output').textContent = 'Error fetching dependencies. Please try again.';
+            });
+    }
+</script>
+
+</body>
+</html>
